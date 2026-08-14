@@ -16,10 +16,10 @@ rsync -a \
   --exclude 'dist/' \
   --exclude '.env' \
   --exclude 'database/database.sqlite' \
-  --exclude 'storage/logs/*' \
-  --exclude 'storage/framework/cache/*' \
+  --exclude 'storage/logs/*.log' \
+  --exclude 'storage/framework/cache/data/*' \
   --exclude 'storage/framework/sessions/*' \
-  --exclude 'storage/framework/views/*' \
+  --exclude 'storage/framework/views/*.php' \
   "$root/" "$dest/"
 
 php -r '

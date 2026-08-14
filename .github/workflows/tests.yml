@@ -15,5 +15,6 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, sqlite, pdo_sqlite, openssl, tokenizer, xml, ctype, json, bcmath
           coverage: none
+      - run: mkdir -p storage/framework/{sessions,views,cache/data} bootstrap/cache
       - run: composer install --no-interaction --prefer-dist --no-progress
       - run: php artisan test
