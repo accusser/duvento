@@ -4,6 +4,8 @@
 
 Self-host, лицензия AGPLv3. Docker не обязателен.
 
+Публичный код: https://github.com/accusser/duvento
+
 ## Требования
 
 - PHP 8.3+ (pdo_mysql или pdo_sqlite, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, curl)
@@ -94,6 +96,33 @@ php artisan migrate --seed
 
 ## Черновики запуска
 
-**r/selfhosted / r/webdev:** AGPLv3 deadline tracker for agencies (domains, SSL, hosting). Composer + MySQL + one cron, no Docker required. Cloud exists if you do not want to self-host.
+Копировать как есть. Ссылка на код: https://github.com/accusser/duvento
 
-**Indie Hackers / Product Hunt:** Duvento — stop missing client domain/SSL renewals. 14-day trial, then $19/$49. Same product as the open-source self-host.
+**r/selfhosted**
+
+Title: Duvento — AGPLv3 deadline tracker for client domains/SSL/hosting (no Docker)
+
+I built a small Laravel app for web agencies that keep missing domain and SSL renewals.
+
+Self-host: PHP 8.3 + Composer + MySQL/SQLite + one cron. No Docker, no Redis. Email reminders at 30/14/7/1 days, SSL expiry via a raw 443 handshake, CSV export.
+
+If you do not want to run a server, there is a managed cloud (14-day trial, then $19/$49). Same product.
+
+Repo: https://github.com/accusser/duvento
+
+**r/webdev**
+
+Title: Open-source deadline tracker for agency retainers (domains, SSL, plugin licenses)
+
+We kept letting client certs and domains expire. Duvento is a quiet dashboard: countdown in days, not red alert soup. AGPLv3, install in about 15 minutes.
+
+https://github.com/accusser/duvento
+
+**Indie Hackers / Product Hunt**
+
+Duvento — nothing expires unnoticed.
+
+Track client domains, SSL, hosting and licenses. Self-host free (AGPLv3) or skip the server: 14-day trial, then Starter $19 / Agency $49.
+
+https://github.com/accusser/duvento
+

@@ -75,6 +75,7 @@ class BillingCycleTest extends TestCase
 
     public function test_paddle_webhook_activates_subscription(): void
     {
+        $this->skipWithoutCloud();
         config(['edition.edition' => 'cloud']);
 
         $user = User::factory()->create();
@@ -153,6 +154,7 @@ class BillingCycleTest extends TestCase
 
     public function test_paddle_gateway_builds_checkout_url(): void
     {
+        $this->skipWithoutCloud();
         \Illuminate\Support\Facades\Http::fake([
             'sandbox-api.paddle.com/transactions' => \Illuminate\Support\Facades\Http::response([
                 'data' => ['checkout' => ['url' => 'https://sandbox-buy.paddle.com/tx_test']],

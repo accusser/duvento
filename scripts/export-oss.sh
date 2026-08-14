@@ -38,7 +38,7 @@ file_put_contents($path, json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAP
 
 rm -f "$dest/composer.lock"
 if command -v composer >/dev/null; then
-  (cd "$dest" && composer update --lock --no-install --no-interaction)
+  (cd "$dest" && composer update --no-install --no-scripts --no-interaction)
 fi
 
 echo "OSS-копия: $dest"
