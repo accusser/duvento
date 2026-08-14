@@ -1,0 +1,110 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+:root {
+    --ink: #111827;
+    --surface: #f6f7f5;
+    --card: #ffffff;
+    --brand-primary: #2e4a5e;
+    --brand-accent: #c98a3e;
+    --border: #e1e4e1;
+    --muted: #6b7280;
+    --status-ok: #2f9e6e;
+    --status-upcoming: #4c7da8;
+    --status-urgent: #c98a3e;
+    --status-critical: #c24a42;
+}
+
+[data-theme='dark'] {
+    --ink: #edefef;
+    --surface: #161a1d;
+    --card: #1c2125;
+    --brand-primary: #5b87a3;
+    --brand-accent: #d9a25b;
+    --border: #2a2f33;
+    --muted: #9ca3af;
+    --status-ok: #4cbe8b;
+    --status-upcoming: #6fa0c9;
+    --status-urgent: #d9a25b;
+    --status-critical: #d9695f;
+}
+
+@theme inline {
+    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Space Grotesk', ui-sans-serif, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --color-ink: var(--ink);
+    --color-surface: var(--surface);
+    --color-brand: var(--brand-primary);
+    --color-accent: var(--brand-accent);
+    --color-border: var(--border);
+    --color-muted: var(--muted);
+    --color-ok: var(--status-ok);
+    --color-upcoming: var(--status-upcoming);
+    --color-urgent: var(--status-urgent);
+    --color-critical: var(--status-critical);
+    --color-card: var(--card);
+    --radius-card: 10px;
+}
+
+@layer base {
+    html {
+        color-scheme: light;
+    }
+
+    html[data-theme='dark'] {
+        color-scheme: dark;
+    }
+
+    body {
+        background: var(--surface);
+        color: var(--ink);
+        font-family: var(--font-sans);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--brand-accent);
+        outline-offset: 2px;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    .card-hover {
+        transition: box-shadow 150ms ease;
+    }
+
+    .card-hover:hover {
+        box-shadow: 0 4px 12px rgb(17 24 39 / 0.06);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .card-hover,
+        .table-fade {
+            transition: none;
+            animation: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .table-fade {
+            animation: duvento-fade 200ms ease-out;
+        }
+    }
+}
+
+@keyframes duvento-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

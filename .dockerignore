@@ -1,0 +1,12 @@
+.git
+.gitignore
+vendor
+node_modules
+тз
+dist
+.env
+database/*.sqlite
+storage/logs
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
