@@ -17,6 +17,20 @@ Duvento is a free self-hosted application distributed under AGPL-3.0-or-later. D
 - Team invitations, built-in support tickets, search, and notifications
 - English, Ukrainian, Russian, German, Spanish, and Polish interface
 
+## Screenshots
+
+### Dashboard
+
+![Duvento dashboard in English](docs/dashboard-en.png)
+
+### Clients
+
+![Duvento clients in English](docs/clients-en.png)
+
+### Support
+
+![Duvento support in English](docs/support-en.png)
+
 ## Requirements
 
 - PHP 8.3+ with `pdo_mysql` or `pdo_sqlite`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, and `intl`
