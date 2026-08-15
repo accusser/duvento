@@ -13,8 +13,32 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring, sqlite, pdo_sqlite, openssl, tokenizer, xml, ctype, json, bcmath
+          extensions: mbstring, sqlite, pdo_sqlite, openssl, tokenizer, xml, ctype, json, bcmath, intl
           coverage: none
       - run: mkdir -p storage/framework/{sessions,views,cache/data} bootstrap/cache
       - run: composer install --no-interaction --prefer-dist --no-progress
       - run: php artisan test
+
+  oss:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, sqlite, pdo_sqlite, openssl, tokenizer, xml, ctype, json, bcmath, intl
+          coverage: none
+      - run: composer run export-oss
+      - name: OSS copy has no closed modules
+        run: |
+          test ! -e dist/duvento-oss/packages/duvento-cloud
+          test ! -e dist/duvento-oss/1fila
+          test ! -e dist/duvento-oss/1Nyvora
+          test ! -e dist/duvento-oss/тз
+          ! grep -q 'duvento/cloud' dist/duvento-oss/composer.json
+      - name: OSS tests
+        working-directory: dist/duvento-oss
+        run: |
+          mkdir -p storage/framework/{sessions,views,cache/data} bootstrap/cache
+          composer install --no-interaction --prefer-dist --no-progress
+          php artisan test

@@ -12,6 +12,7 @@
     "license": "AGPL-3.0-or-later",
     "require": {
         "php": "^8.3",
+        "ext-intl": "*",
         "filament/filament": "^4.0",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
@@ -48,6 +49,7 @@
             "npm run build"
         ],
         "export-oss": "bash scripts/export-oss.sh",
+        "build-release": "bash scripts/build-release.sh",
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "@php artisan dev"

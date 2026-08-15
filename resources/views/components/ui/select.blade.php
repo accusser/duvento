@@ -1,10 +1,14 @@
-@props(['label' => null])
+@props(['label' => null, 'groupClass' => 'mb-3'])
 
-<label class="block">
-    @if ($label)
-        <span class="mb-1.5 block text-sm text-muted">{{ $label }}</span>
-    @endif
-    <select {{ $attributes->class('w-full rounded-[10px] border border-border bg-card px-3 py-2 text-sm text-ink') }}>
+@if ($label)
+    <div class="{{ $groupClass }}">
+        <label class="form-label">{{ $label }}</label>
+        <select {{ $attributes->class('form-select') }}>
+            {{ $slot }}
+        </select>
+    </div>
+@else
+    <select {{ $attributes->class('form-select') }}>
         {{ $slot }}
     </select>
-</label>
+@endif

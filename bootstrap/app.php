@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\EnsureWorkspace;
+use App\Http\Middleware\InstallerMiddleware;
+use App\Http\Middleware\SetAppLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,11 +15,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->prepend(InstallerMiddleware::class);
         $middleware->alias([
-            'workspace' => \App\Http\Middleware\EnsureWorkspace::class,
+            'workspace' => EnsureWorkspace::class,
+        ]);
+        $middleware->web(append: [
+            SetAppLocale::class,
+        ]);
+        $middleware->encryptCookies(except: [
+            'nyvora-theme',
+            'nyvora-admin-theme',
+            'nyvora-admin-layout',
         ]);
         $middleware->validateCsrfTokens(except: [
             'billing/paddle/webhook',
+            'api/*',
         ]);
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('dashboard'));

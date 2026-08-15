@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Subscriptions;
 
+use App\Filament\Concerns\CloudOnlyResource;
+use App\Filament\Concerns\HasAdminLexicon;
 use App\Filament\Resources\Subscriptions\Pages\ListSubscriptions;
 use App\Filament\Resources\Subscriptions\Tables\SubscriptionsTable;
 use App\Models\Subscription;
@@ -12,11 +14,17 @@ use Filament\Tables\Table;
 
 class SubscriptionResource extends Resource
 {
+    use CloudOnlyResource;
+    use HasAdminLexicon;
+
     protected static ?string $model = Subscription::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCreditCard;
 
-    protected static ?string $navigationLabel = 'Подписки';
+    public static function adminLexicon(): string
+    {
+        return 'admin.resources.subscriptions';
+    }
 
     public static function canCreate(): bool
     {

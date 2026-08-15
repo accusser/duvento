@@ -1,42 +1,63 @@
 @php
-    $labels = [
-        'asset.created' => 'Актив создан',
-        'asset.updated' => 'Актив изменён',
-        'asset.date_changed' => 'Дата истечения изменена',
-        'asset.renewed' => 'Отмечено продление',
-        'asset.deleted' => 'Актив удалён',
-        'client.created' => 'Клиент создан',
-        'client.updated' => 'Клиент изменён',
-        'client.deleted' => 'Клиент удалён',
-        'reminder.sent' => 'Напоминание отправлено',
-        'ssl.updated' => 'SSL-дата обновлена',
-        'ssl.check_failed' => 'SSL-проверка не удалась',
-        'reminders.updated' => 'Правила напоминаний обновлены',
-        'asset_type.created' => 'Тип актива создан',
-        'asset_type.deleted' => 'Тип актива удалён',
+    $isOwner = auth()->user()->ownsCurrentWorkspace();
+    $icons = [
+        'asset.renewed' => ['mdi-calendar-check', 'mint'],
+        'reminder.sent' => ['mdi-email-fast-outline', 'cool'],
+        'asset.created' => ['mdi-plus', ''],
+        'asset.deleted' => ['mdi-delete-outline', 'warm'],
+        'ssl.updated' => ['mdi-lock-check-outline', 'mint'],
     ];
 @endphp
 
 <div>
-    <h1 class="mb-6 font-display text-2xl font-semibold tracking-tight">Журнал</h1>
-    <x-ui.card class="table-fade divide-y divide-border overflow-hidden">
-        @forelse ($logs as $log)
-            <div class="px-4 py-3">
-                <p class="font-medium">{{ $labels[$log->action] ?? $log->action }}</p>
-                <p class="mt-1 font-mono text-sm text-muted">
-                    {{ $log->created_at->format('Y-m-d H:i') }}
-                    · {{ $log->user?->name ?? 'система' }}
-                    @if (!empty($log->properties['name']))
-                        · {{ $log->properties['name'] }}
-                    @endif
-                    @if (!empty($log->properties['email']))
-                        · {{ $log->properties['email'] }}
-                    @endif
-                </p>
-            </div>
-        @empty
-            <p class="px-4 py-8 text-sm text-muted">Пока пусто.</p>
-        @endforelse
-    </x-ui.card>
-    <div class="mt-4">{{ $logs->links() }}</div>
+    <x-page-head :title="__('app.activity.title')" :sub="__('app.activity.sub')">
+        <x-ui.button href="{{ route('export.activity') }}">
+            <i class="mdi mdi-download me-1"></i>{{ __('app.common.csv') }}
+        </x-ui.button>
+        @if ($isOwner && $logs->total() > 0)
+            <x-ui.button variant="danger" icon="notification-clear-all" :tip="__('app.activity.clear')" wire:click="clear" wire:confirm="{{ __('app.activity.confirm_clear') }}" />
+        @endif
+    </x-page-head>
+
+    <div class="card">
+        <div class="list-group list-group-flush">
+            @forelse ($logs as $log)
+                @php [$mdi, $tone] = $icons[$log->action] ?? ['mdi-history', 'mint']; @endphp
+                <div class="list-group-item">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="stat-icon-wrap flex-shrink-0 {{ $tone }}" style="width:40px;height:40px;font-size:1.1rem;"><i class="mdi {{ $mdi }}"></i></span>
+                        <div class="min-w-0">
+                            <p class="mb-1 fw-semibold">{{ __('app.activity.actions')[$log->action] ?? $log->action }}</p>
+                            <p class="mb-0 small text-muted">
+                                <code>{{ $log->created_at->format('Y-m-d H:i') }}</code>
+                                · {{ $log->user?->name ?? __('app.common.system') }}
+                                @if (!empty($log->properties['name']))
+                                    · {{ $log->properties['name'] }}
+                                @endif
+                                @if (!empty($log->properties['days_before']))
+                                    · {{ __('app.notifications.days_before', ['days' => $log->properties['days_before']]) }}
+                                @endif
+                                @if (!empty($log->properties['email']))
+                                    · {{ $log->properties['email'] }}
+                                @endif
+                                @if (!empty($log->properties['from']) || !empty($log->properties['to']))
+                                    · {{ $log->properties['from'] ?? __('app.common.empty') }} → {{ $log->properties['to'] ?? __('app.common.empty') }}
+                                @endif
+                                @if (!empty($log->properties['days']) && is_array($log->properties['days']))
+                                    · {{ __('app.activity.days', ['days' => implode(', ', $log->properties['days'])]) }}
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="ny-list-empty">
+                    {{ __('app.activity.empty') }}
+                    <a href="{{ route('assets') }}" wire:navigate>{{ __('app.activity.empty_add') }}</a>
+                    {{ __('app.activity.empty_after') }}
+                </div>
+            @endforelse
+        </div>
+    </div>
+    <div class="mt-3">{{ $logs->links() }}</div>
 </div>

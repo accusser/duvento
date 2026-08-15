@@ -7,19 +7,23 @@ use App\Models\AssetType;
 use App\Support\ActivityLogger;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
-#[Title('Типы активов — Duvento')]
 class AssetTypes extends Component
 {
     use InteractsWithWorkspace;
 
     public string $label = '';
 
+    public function mount(): void
+    {
+        $this->assertOwner();
+    }
+
     public function add(): void
     {
+        $this->assertOwner();
         $validated = $this->validate([
             'label' => ['required', 'string', 'max:80'],
         ]);
@@ -37,20 +41,23 @@ class AssetTypes extends Component
 
         ActivityLogger::log($workspace, 'asset_type.created', $type, ['label' => $type->label]);
         $this->reset('label');
+        $this->toast(__('app.flash.type_added'));
     }
 
     public function delete(int $id): void
     {
+        $this->assertOwner();
         $type = $this->workspace()->assetTypes()->findOrFail($id);
 
         if ($type->assets()->exists()) {
-            $this->addError('label', 'Нельзя удалить тип, пока к нему привязаны активы.');
+            $this->addError('label', __('app.types.in_use'));
 
             return;
         }
 
         ActivityLogger::log($this->workspace(), 'asset_type.deleted', $type, ['label' => $type->label]);
         $type->delete();
+        $this->toast(__('app.flash.type_deleted'), 'delete');
     }
 
     public function render()
@@ -58,8 +65,9 @@ class AssetTypes extends Component
         $workspace = $this->workspace();
 
         return view('livewire.settings.asset-types', [
-            'system' => AssetType::query()->whereNull('workspace_id')->orderBy('label')->get(),
+            'system' => AssetType::query()->whereNull('workspace_id')->get()
+                ->sortBy(fn (AssetType $type) => mb_strtolower($type->displayLabel())),
             'custom' => $workspace->assetTypes()->orderBy('label')->get(),
-        ]);
+        ])->title(__('app.titles.types'));
     }
 }

@@ -14,6 +14,7 @@ final class AssetQuery
         ?string $search = null,
         ?string $status = null,
         ?int $clientId = null,
+        array $extra = [],
     ): Collection {
         $query = $workspace->assets()->with(['client', 'assetType']);
 
@@ -26,6 +27,30 @@ final class AssetQuery
 
         if ($clientId) {
             $query->where('client_id', $clientId);
+        }
+
+        if (! empty($extra['typeId'])) {
+            $query->where('asset_type_id', (int) $extra['typeId']);
+        }
+
+        if (filled($extra['owner'] ?? null)) {
+            $query->where('owner', $extra['owner']);
+        }
+
+        if (filled($extra['payer'] ?? null)) {
+            $query->where('payer', $extra['payer']);
+        }
+
+        if (($extra['expiry'] ?? '') === 'missing') {
+            $query->whereNull('expires_at');
+        }
+
+        if (($extra['expiry'] ?? '') === 'dated') {
+            $query->whereNotNull('expires_at');
+        }
+
+        if (! empty($extra['cashflowDays'])) {
+            UpcomingPayments::constrain($query, (int) $extra['cashflowDays']);
         }
 
         $assets = $query
@@ -55,5 +80,18 @@ final class AssetQuery
 
             return $counts;
         }, $base);
+    }
+
+    public static function extras(Workspace $workspace): array
+    {
+        $assets = $workspace->assets;
+
+        return [
+            'clients' => $workspace->clients()->count(),
+            'assets' => $assets->count(),
+            'expired' => $assets->filter(fn (Asset $asset) => $asset->status === AssetStatus::Expired)->count(),
+            'missing_expiry' => $assets->whereNull('expires_at')->count(),
+            'unknown_owner' => $assets->filter(fn (Asset $asset) => $asset->owner->value === 'unknown')->count(),
+        ];
     }
 }

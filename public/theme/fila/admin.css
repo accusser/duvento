@@ -1,0 +1,463 @@
+.fi-body.fi-panel-admin {
+  font-family: Inter, system-ui, sans-serif;
+  background-color: var(--ny-bg, #fff);
+  color: var(--ny-body, #3a3f5a);
+}
+
+.fi-panel-admin .fi-main {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  width: 100%;
+}
+
+.fi-panel-admin .fi-page,
+.fi-panel-admin .fi-dashboard-page {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* Filament pads this container by 2rem, which pushes the heading below the first sidebar item. */
+.fi-panel-admin .fi-page-header-main-ctn {
+  padding-block: 0 !important;
+  row-gap: 1.15rem;
+}
+
+.fi-panel-admin .fi-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+
+.fi-panel-admin ul[class*="fi-"],
+.fi-panel-admin ol[class*="fi-"] {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fi-panel-admin .fi-breadcrumbs {
+  margin-bottom: 0.15rem;
+}
+
+.fi-panel-admin .fi-breadcrumbs ol {
+  column-gap: 0.5rem;
+  row-gap: 0.25rem;
+}
+
+.fi-panel-admin .fi-breadcrumbs ol li {
+  font-size: 0.8rem;
+  color: var(--ny-muted, #7a83a3);
+}
+
+.fi-panel-admin .fi-breadcrumbs ol li a:hover {
+  color: var(--ny-primary, #007257);
+}
+
+.fi-panel-admin .fi-header-heading {
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: 1.45rem !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em;
+  color: var(--ny-heading, #1a1d35) !important;
+  margin: 0;
+}
+
+.fi-panel-admin .fi-header-subheading {
+  color: var(--ny-muted, #7a83a3) !important;
+  font-size: 0.85rem !important;
+  max-width: 62ch;
+  margin: 0.2rem 0 0;
+}
+
+.fi-panel-admin .fi-header-actions-ctn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.fi-panel-admin .fi-section,
+.fi-panel-admin .fi-ta-ctn,
+.fi-panel-admin .fi-wi:not(.fi-wi-ny-stats) {
+  background: var(--ny-card, #fff) !important;
+  border: 1px solid var(--ny-border, #e6e9f4) !important;
+  border-radius: var(--ny-radius, 14px) !important;
+  box-shadow: var(--ny-shadow-xs, 0 2px 6px rgba(26, 29, 53, 0.04)) !important;
+}
+
+.fi-panel-admin .fi-section-content-ctn {
+  border-top: 0 !important;
+  padding: 1.35rem !important;
+}
+
+.fi-panel-admin .fi-fo-field-label-content {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: var(--ny-heading, #1a1d35) !important;
+}
+
+.fi-panel-admin .fi-fo-field-label-required-mark {
+  color: var(--ny-danger, #f43f5e) !important;
+}
+
+.fi-panel-admin .fi-input-wrp {
+  display: flex;
+  align-items: center;
+  background-color: var(--ny-input-bg, #f7f8fd) !important;
+  border: 1px solid var(--ny-input-border, #e2e5f2) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  outline: none !important;
+  min-height: 42px;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.fi-panel-admin .fi-input-wrp:has(textarea) {
+  height: auto;
+}
+
+.fi-panel-admin .fi-input-wrp:focus-within {
+  box-shadow: var(--ny-glow, 0 0 0 6px rgba(0, 114, 87, 0.18)) !important;
+  outline: none !important;
+  border-color: var(--ny-primary, #007257) !important;
+  background: var(--ny-card, #fff) !important;
+}
+
+.fi-panel-admin .fi-input-wrp.fi-invalid {
+  border-color: var(--ny-danger, #f43f5e) !important;
+}
+
+.fi-panel-admin .fi-fo-field-wrp-error-message {
+  color: var(--ny-danger, #f43f5e) !important;
+  font-size: 0.875em !important;
+  font-style: normal !important;
+}
+
+.fi-panel-admin .fi-input,
+.fi-panel-admin .fi-select-input,
+.fi-panel-admin .fi-select-input-btn {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: var(--ny-body, #3a3f5a) !important;
+  font-size: 0.875rem !important;
+  width: 100%;
+}
+
+.fi-panel-admin .fi-input::placeholder,
+.fi-panel-admin .fi-select-input-placeholder {
+  color: var(--ny-muted, #7a83a3) !important;
+}
+
+.fi-header-actions-ctn .fi-btn,
+.fi-sc-actions .fi-btn,
+.fi-modal-footer-actions .fi-btn {
+  padding: 0.55rem 1.15rem !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+.fi-header-actions-ctn .fi-btn.fi-color-primary:not(.fi-outlined),
+.fi-sc-actions .fi-btn.fi-color-primary:not(.fi-outlined),
+.fi-modal-footer-actions .fi-btn.fi-color-primary:not(.fi-outlined) {
+  background: var(--ny-grad-primary, linear-gradient(135deg, #00a87a 0%, #007257 100%)) !important;
+  border: 0 !important;
+  color: #fff !important;
+  box-shadow: 0 6px 18px rgba(0, 114, 87, 0.35) !important;
+}
+
+.fi-header-actions-ctn .fi-btn.fi-color-danger:not(.fi-outlined),
+.fi-sc-actions .fi-btn.fi-color-danger:not(.fi-outlined),
+.fi-modal-footer-actions .fi-btn.fi-color-danger:not(.fi-outlined) {
+  background-color: var(--ny-danger, #f43f5e) !important;
+  border: 0 !important;
+  color: #fff !important;
+}
+
+.fi-header-actions-ctn .fi-icon-btn {
+  padding: 0.55rem !important;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fi-wi-ny-stats {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* `clip` instead of `hidden`: `hidden` turns the container into a scroll box on both
+   axes, which cuts off the filters dropdown hanging below the table header. */
+.fi-panel-admin .fi-ta-ctn,
+.fi-panel-admin .fi-ta-content,
+.fi-panel-admin .fi-ta-content-ctn,
+.fi-panel-admin .fi-ta-main {
+  overflow-x: clip !important;
+}
+
+/* Auto layout: a fixed layout splits the width equally between columns, which starves
+   the row actions column and pushes its buttons past the card. Cells wrap below, so
+   the table still fits without a fixed layout. */
+.fi-panel-admin .fi-ta-table {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.fi-panel-admin .fi-ta-cell,
+.fi-panel-admin .fi-ta-header-cell,
+.fi-panel-admin .fi-ta-text {
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.fi-panel-admin .activity-props {
+  display: grid;
+  gap: .75rem;
+}
+
+.fi-panel-admin .activity-prop-label {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--ny-muted, #7a83a3);
+  margin-bottom: .15rem;
+}
+
+.fi-panel-admin .activity-prop-value {
+  color: var(--ny-heading, #1a1d35);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+html.dark .fi-panel-admin .activity-prop-value,
+[data-bs-theme="dark"] .fi-panel-admin .activity-prop-value {
+  color: #fff;
+}
+
+.fi-panel-admin .stat-card-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.fi-panel-admin .stat-card-link:hover,
+.fi-panel-admin .stat-card-link:focus-visible {
+  color: inherit;
+  transform: translateY(-3px);
+  box-shadow: var(--ny-shadow-lg, 0 14px 32px rgba(26, 29, 53, 0.14)) !important;
+}
+
+.fi-panel-admin .stat-card-link:focus-visible {
+  outline: 2px solid var(--ny-primary, #007257);
+  outline-offset: 3px;
+}
+
+.fi-panel-admin .widget-row-link > td {
+  padding: 0 !important;
+}
+
+.fi-panel-admin .widget-row-link > td > a {
+  display: block;
+  height: 100%;
+  padding: var(--bs-table-cell-padding-y, 0.5rem) var(--bs-table-cell-padding-x, 0.5rem);
+  color: inherit;
+  text-decoration: none;
+}
+
+.fi-panel-admin .widget-row-link:hover > td {
+  background-color: var(--ny-hover, rgba(0, 114, 87, 0.06));
+}
+
+.fi-panel-admin .admin-export-card {
+  max-width: 52rem;
+}
+
+.fi-panel-admin .admin-export-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  font-size: 1.35rem;
+  background: var(--ny-grad-primary, linear-gradient(135deg, #00a87a 0%, #007257 100%));
+  box-shadow: 0 8px 20px rgba(0, 114, 87, 0.25);
+}
+
+.fi-panel-admin .admin-export-card .form-select {
+  min-height: 42px;
+  border-color: var(--ny-input-border, #e2e5f2);
+  border-radius: 12px;
+  background-color: var(--ny-input-bg, #f7f8fd);
+  color: var(--ny-body, #3a3f5a);
+  box-shadow: none;
+}
+
+.fi-panel-admin .admin-export-card .form-select:focus {
+  border-color: var(--ny-primary, #007257);
+  box-shadow: var(--ny-glow, 0 0 0 6px rgba(0, 114, 87, 0.18));
+}
+
+.fi-panel-admin .fi-no {
+  z-index: 1080;
+}
+
+.fi-panel-admin .fi-no-notification:not(.fi-inline) {
+  position: relative;
+  align-items: center;
+  width: min(24rem, calc(100vw - 2rem));
+  max-width: min(24rem, calc(100vw - 2rem));
+  padding: 0.95rem 1rem 0.9rem !important;
+  border-radius: var(--ny-radius, 14px) !important;
+  background: var(--ny-grad-primary, linear-gradient(135deg, #00a87a 0%, #007257 100%)) !important;
+  background-color: #007257 !important;
+  box-shadow: 0 16px 34px rgba(0, 114, 87, 0.32) !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+}
+
+/* Timer bar mirrors the client-side toast; Filament keeps toasts for 6s by default. */
+.fi-panel-admin .fi-no-notification:not(.fi-inline)::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: #fff;
+  transform-origin: left center;
+  animation: fi-no-progress 6s linear forwards;
+}
+
+@keyframes fi-no-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fi-panel-admin .fi-no-notification:not(.fi-inline)::after {
+    animation: none;
+  }
+}
+
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-icon {
+  box-sizing: content-box;
+  width: 1.35rem !important;
+  height: 1.35rem !important;
+  padding: 0.5rem;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.fi-panel-admin .fi-no-notification-title {
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+
+.fi-panel-admin .fi-no-notification-body {
+  font-size: 0.825rem !important;
+  line-height: 1.45 !important;
+}
+
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-title,
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-icon,
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-close-btn,
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-close-btn .fi-icon {
+  color: #fff !important;
+}
+
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-body,
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-body p,
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-date {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-actions .fi-btn {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.fi-panel-admin .fi-no-notification:not(.fi-inline) .fi-no-notification-actions .fi-btn:hover {
+  background: rgba(255, 255, 255, 0.26) !important;
+}
+
+.fi-simple-layout {
+  font-family: Inter, system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--ny-bg, #fff) !important;
+  background-image: var(--ny-bg-pattern, none);
+}
+
+.fi-simple-main {
+  border-radius: var(--ny-radius-lg, 22px) !important;
+  border: 1px solid var(--ny-border, #e6e9f4) !important;
+  background: var(--ny-card, #fff) !important;
+  box-shadow: var(--ny-shadow-lg, 0 22px 50px rgba(26, 29, 53, 0.14)) !important;
+  padding: 2.5rem !important;
+}
+
+.fi-simple-layout .brand {
+  color: var(--ny-heading, #1a1d35);
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+html.dark .fi-body.fi-panel-admin,
+[data-bs-theme="dark"] .fi-body.fi-panel-admin {
+  background-color: var(--ny-bg, #2a2d2d);
+  color: var(--ny-body, #c4cae0);
+}
+
+html.dark .fi-panel-admin .fi-header-heading,
+[data-bs-theme="dark"] .fi-panel-admin .fi-header-heading,
+html.dark .fi-panel-admin .fi-fo-field-label-content,
+[data-bs-theme="dark"] .fi-panel-admin .fi-fo-field-label-content,
+html.dark .fi-panel-admin .fi-input,
+[data-bs-theme="dark"] .fi-panel-admin .fi-input,
+html.dark .fi-panel-admin .fi-select-input,
+[data-bs-theme="dark"] .fi-panel-admin .fi-select-input {
+  color: var(--ny-heading, #f1f3fc) !important;
+}
+
+html.dark .fi-panel-admin .fi-input-wrp,
+[data-bs-theme="dark"] .fi-panel-admin .fi-input-wrp {
+  background-color: var(--ny-input-bg, #333737) !important;
+  border-color: var(--ny-input-border, #4a4e4e) !important;
+}
+
+html.dark .fi-simple-layout,
+[data-bs-theme="dark"] .fi-simple-layout {
+  background-color: var(--ny-bg, #2a2d2d) !important;
+}
+
+html.dark .fi-simple-main,
+[data-bs-theme="dark"] .fi-simple-main {
+  background: var(--ny-card, #3a3e3e) !important;
+  border-color: var(--ny-border, #4a4e4e) !important;
+}

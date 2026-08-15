@@ -2,19 +2,35 @@
     'variant' => 'ghost',
     'type' => 'button',
     'href' => null,
+    'icon' => null,
+    'tip' => null,
 ])
 
 @php
-    $classes = 'inline-flex items-center justify-center rounded-[10px] px-3.5 py-2 text-sm font-medium transition duration-150 disabled:opacity-50 ';
+    $classes = 'btn ';
     $classes .= match ($variant) {
-        'accent' => 'bg-accent text-white hover:opacity-90',
-        'danger' => 'border border-critical text-critical hover:bg-critical/10',
-        default => 'border border-border text-ink hover:border-brand',
+        'accent' => 'btn-primary',
+        'danger' => 'btn-outline-danger',
+        'soft' => 'btn-soft-primary',
+        default => 'btn-outline-secondary',
+    };
+    if ($icon) {
+        $classes .= ' btn-icon btn-sm';
+    }
+    $iconClass = $icon && ! str_starts_with($icon, 'mdi-') ? 'mdi-'.$icon : $icon;
+    $tipTone = match ($variant) {
+        'danger' => 'danger',
+        'soft', 'accent' => 'primary',
+        default => null,
     };
 @endphp
 
 @if ($href)
-    <a href="{{ $href }}" {{ $attributes->class($classes) }}>{{ $slot }}</a>
+    <a href="{{ $href }}" @if ($tip) data-tip @if ($tipTone) data-tip-tone="{{ $tipTone }}" @endif aria-label="{{ $tip }}" @endif {{ $attributes->class($classes) }}>
+        @if ($icon)<i class="mdi {{ $iconClass }}"></i>@endif{{ $slot }}@if ($tip)<span class="ny-tip">{{ $tip }}</span>@endif
+    </a>
 @else
-    <button type="{{ $type }}" {{ $attributes->class($classes) }}>{{ $slot }}</button>
+    <button type="{{ $type }}" @if ($tip) data-tip @if ($tipTone) data-tip-tone="{{ $tipTone }}" @endif aria-label="{{ $tip }}" @endif {{ $attributes->class($classes) }}>
+        @if ($icon)<i class="mdi {{ $iconClass }}"></i>@endif{{ $slot }}@if ($tip)<span class="ny-tip">{{ $tip }}</span>@endif
+    </button>
 @endif

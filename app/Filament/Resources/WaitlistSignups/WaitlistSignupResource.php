@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\WaitlistSignups;
 
+use App\Filament\Concerns\CloudOnlyResource;
+use App\Filament\Concerns\HasAdminLexicon;
 use App\Filament\Resources\WaitlistSignups\Pages\CreateWaitlistSignup;
 use App\Filament\Resources\WaitlistSignups\Pages\EditWaitlistSignup;
 use App\Filament\Resources\WaitlistSignups\Pages\ListWaitlistSignups;
@@ -16,11 +18,17 @@ use Filament\Tables\Table;
 
 class WaitlistSignupResource extends Resource
 {
+    use CloudOnlyResource;
+    use HasAdminLexicon;
+
     protected static ?string $model = WaitlistSignup::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
-    protected static ?string $navigationLabel = 'Вейтлист';
+    public static function adminLexicon(): string
+    {
+        return 'admin.resources.waitlist';
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -1,31 +1,38 @@
-<div class="max-w-xl">
-    <h1 class="font-display text-2xl font-semibold tracking-tight">Типы активов</h1>
-    <p class="mt-1 mb-6 text-sm text-muted">Системные типы общие для всех. Свои — только для этого воркспейса.</p>
+<div>
+    <x-page-head :title="__('app.types.title')" :sub="__('app.types.sub')" />
 
-    <h2 class="mb-2 text-sm text-muted">Системные</h2>
-    <x-ui.card class="mb-6 divide-y divide-border overflow-hidden">
-        @foreach ($system as $type)
-            <p class="px-4 py-3">{{ $type->label }} <span class="font-mono text-xs text-muted">{{ $type->key }}</span></p>
-        @endforeach
-    </x-ui.card>
-
-    <h2 class="mb-2 text-sm text-muted">Свои</h2>
-    <form wire:submit="add" class="mb-4 flex items-end gap-2">
-        <div class="flex-1">
-            <x-ui.input label="Название" wire:model="label" placeholder="Например, страховка" />
+    <h6 class="text-muted mb-2">{{ __('app.types.system') }}</h6>
+    <div class="card mb-4">
+        <div class="list-group list-group-flush">
+            @foreach ($system as $type)
+                <div class="list-group-item d-flex justify-content-between align-items-center gap-3">
+                    <span class="min-w-0">{{ $type->displayLabel() }}</span>
+                    <code class="small text-muted flex-shrink-0">{{ $type->key }}</code>
+                </div>
+            @endforeach
         </div>
-        <x-ui.button variant="accent" type="submit">Добавить</x-ui.button>
-    </form>
-    @error('label') <p class="mb-4 text-sm text-critical">{{ $message }}</p> @enderror
+    </div>
 
-    <x-ui.card class="divide-y divide-border overflow-hidden">
-        @forelse ($custom as $type)
-            <div class="flex items-center justify-between gap-3 px-4 py-3">
-                <p>{{ $type->label }} <span class="font-mono text-xs text-muted">{{ $type->key }}</span></p>
-                <x-ui.button variant="danger" wire:click="delete({{ $type->id }})" wire:confirm="Удалить тип?">Удалить</x-ui.button>
-            </div>
-        @empty
-            <p class="px-4 py-6 text-sm text-muted">Своих типов пока нет — можно добавить контракт, полис, SaaS-подписку.</p>
-        @endforelse
-    </x-ui.card>
+    <h6 class="text-muted mb-2">{{ __('app.types.custom') }}</h6>
+    <form wire:submit="add" class="ny-inline-add">
+        <x-ui.input group-class="flex-grow-1 mb-0" :label="__('app.fields.label')" wire:model="label" placeholder="{{ __('app.types.placeholder') }}" />
+        <x-ui.button variant="accent" type="submit">{{ __('app.common.add') }}</x-ui.button>
+    </form>
+    @error('label') <div class="invalid-feedback d-block mb-3">{{ $message }}</div> @enderror
+
+    <div class="card">
+        <div class="list-group list-group-flush">
+            @forelse ($custom as $type)
+                <div class="list-group-item d-flex justify-content-between align-items-center gap-3">
+                    <span class="min-w-0 text-truncate">{{ $type->label }}</span>
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <code class="small text-muted">{{ $type->key }}</code>
+                        <x-ui.button variant="danger" icon="trash-can-outline" :tip="__('app.common.delete')" wire:click="delete({{ $type->id }})" wire:confirm="{{ __('app.types.confirm_delete') }}" />
+                    </div>
+                </div>
+            @empty
+                <div class="ny-list-empty">{{ __('app.types.empty') }}</div>
+            @endforelse
+        </div>
+    </div>
 </div>

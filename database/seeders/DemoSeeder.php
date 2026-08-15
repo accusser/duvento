@@ -9,6 +9,7 @@ use App\Models\Asset;
 use App\Models\AssetType;
 use App\Models\Client;
 use App\Models\User;
+use App\Models\Workspace;
 use App\Support\ActivityLogger;
 use App\Support\WorkspaceProvisioner;
 use Illuminate\Database\Seeder;
@@ -36,23 +37,31 @@ class DemoSeeder extends Seeder
             ]),
         );
 
+        $north->update(['currency' => 'RUB']);
+
         $atelier = Client::query()->create([
             'workspace_id' => $north->id,
             'name' => 'Nordic Atelier',
+            'contact_name' => 'Анна Лунд',
             'email' => 'hello@nordic-atelier.ru',
+            'website' => 'nordic-atelier.ru',
             'notes' => 'Интернет-магазин керамики. Домен и SSL на нас.',
         ]);
 
         $bakery = Client::query()->create([
             'workspace_id' => $north->id,
             'name' => 'Пекарня «Тихо»',
+            'contact_name' => 'Игорь Тихонов',
             'email' => 'info@tiho-bakery.ru',
+            'website' => 'tiho-bakery.ru',
         ]);
 
         $harbor = Client::query()->create([
             'workspace_id' => $pixel->id,
             'name' => 'Harbor Books',
+            'contact_name' => 'Elena Marsh',
             'email' => 'web@harbor-books.com',
+            'website' => 'harbor-books.com',
         ]);
 
         $this->asset($north, $atelier, $types['domain'], [
@@ -61,6 +70,8 @@ class DemoSeeder extends Seeder
             'auto_renew' => AutoRenew::No,
             'owner' => AssetOwner::Agency,
             'payer' => AssetPayer::Agency,
+            'renewal_cost' => 1490,
+            'currency' => 'RUB',
         ]);
 
         $this->asset($north, $atelier, $types['ssl'], [
@@ -70,6 +81,8 @@ class DemoSeeder extends Seeder
             'owner' => AssetOwner::Agency,
             'payer' => AssetPayer::Agency,
             'ssl_check_enabled' => true,
+            'renewal_cost' => 800,
+            'currency' => 'RUB',
         ]);
 
         $this->asset($north, $atelier, $types['hosting'], [
@@ -78,14 +91,35 @@ class DemoSeeder extends Seeder
             'auto_renew' => AutoRenew::Yes,
             'owner' => AssetOwner::Agency,
             'payer' => AssetPayer::Client,
+            'renewal_cost' => 4900,
+            'currency' => 'RUB',
         ]);
 
-        $this->asset($north, $bakery, $types['plugin_license'], [
+        $this->asset($north, $atelier, $types['plugin_license'], [
             'name' => 'Yoast SEO Premium',
             'expires_at' => now()->addDays(22),
             'auto_renew' => AutoRenew::Unknown,
             'owner' => AssetOwner::Client,
             'payer' => AssetPayer::Client,
+            'renewal_cost' => 99,
+            'currency' => 'USD',
+        ]);
+
+        $insurance = AssetType::query()->create([
+            'workspace_id' => $north->id,
+            'key' => 'insurance',
+            'label' => 'Страховка',
+            'icon' => 'shield',
+        ]);
+
+        $this->asset($north, $bakery, $insurance, [
+            'name' => 'ОСАГО пекарни',
+            'expires_at' => now()->addDays(45),
+            'auto_renew' => AutoRenew::No,
+            'owner' => AssetOwner::Client,
+            'payer' => AssetPayer::Client,
+            'renewal_cost' => 15000,
+            'currency' => 'RUB',
         ]);
 
         $this->asset($pixel, $harbor, $types['domain'], [
@@ -94,6 +128,8 @@ class DemoSeeder extends Seeder
             'auto_renew' => AutoRenew::No,
             'owner' => AssetOwner::Agency,
             'payer' => AssetPayer::Agency,
+            'renewal_cost' => 15,
+            'currency' => 'USD',
         ]);
 
         $this->asset($pixel, $harbor, $types['other'], [
@@ -104,6 +140,8 @@ class DemoSeeder extends Seeder
             'payer' => AssetPayer::Unknown,
             'notes' => 'Дата продления не зафиксирована',
         ]);
+
+        $this->seedHistory();
     }
 
     private function asset($workspace, Client $client, AssetType $type, array $attributes): Asset
@@ -115,8 +153,46 @@ class DemoSeeder extends Seeder
             ...$attributes,
         ]);
 
-        ActivityLogger::log($workspace, 'asset.created', $asset, ['name' => $asset->name], $workspace->users()->first());
+        $actor = $workspace->users()->first();
+        ActivityLogger::log($workspace, 'asset.created', $asset, ['name' => $asset->name], $actor);
 
         return $asset;
+    }
+
+    private function seedHistory(): void
+    {
+        $workspace = Workspace::query()->where('name', 'Северная студия')->first();
+        if (! $workspace) {
+            return;
+        }
+
+        $actor = $workspace->users()->first();
+        $ssl = $workspace->assets()->where('name', 'nordic-atelier.ru')->whereHas('assetType', fn ($q) => $q->where('key', 'ssl'))->first();
+        $domain = $workspace->assets()->where('name', 'nordic-atelier.ru')->whereHas('assetType', fn ($q) => $q->where('key', 'domain'))->first();
+
+        if ($ssl) {
+            $log = ActivityLogger::log($workspace, 'reminder.sent', $ssl, [
+                'name' => $ssl->name,
+                'days_before' => 7,
+                'email' => 'hello@nordic-atelier.ru',
+            ], null);
+            $log->forceFill(['created_at' => now()->subDays(3), 'updated_at' => now()->subDays(3)])->save();
+        }
+
+        if ($domain) {
+            $log = ActivityLogger::log($workspace, 'asset.renewed', $domain, [
+                'name' => $domain->name,
+                'from' => now()->subYear()->addDays(12)->toDateString(),
+                'to' => $domain->expires_at?->toDateString(),
+            ], $actor);
+            $log->forceFill(['created_at' => now()->subDays(20), 'updated_at' => now()->subDays(20)])->save();
+
+            $sent = ActivityLogger::log($workspace, 'reminder.sent', $domain, [
+                'name' => $domain->name,
+                'days_before' => 14,
+                'email' => 'hello@nordic-atelier.ru',
+            ], null);
+            $sent->forceFill(['created_at' => now()->subDays(2), 'updated_at' => now()->subDays(2)])->save();
+        }
     }
 }

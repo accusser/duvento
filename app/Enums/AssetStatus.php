@@ -32,14 +32,7 @@ enum AssetStatus: string
 
     public function label(): string
     {
-        return match ($this) {
-            self::Ok => 'OK',
-            self::Upcoming => 'Upcoming',
-            self::Urgent => 'Urgent',
-            self::Critical => 'Critical',
-            self::Expired => 'Expired',
-            self::Unknown => 'Unknown',
-        };
+        return __('app.enums.status.'.$this->value);
     }
 
     public function colorToken(): string
@@ -64,22 +57,44 @@ enum AssetStatus: string
     public function borderClass(): string
     {
         return match ($this->colorToken()) {
-            'ok' => 'border-ok',
-            'upcoming' => 'border-upcoming',
-            'urgent' => 'border-urgent',
-            'critical' => 'border-critical',
-            default => 'border-muted',
+            'ok' => 'ny-status-ok',
+            'upcoming' => 'ny-status-upcoming',
+            'urgent' => 'ny-status-urgent',
+            'critical' => 'ny-status-critical',
+            default => 'ny-status-muted',
         };
     }
 
     public function dotClass(): string
     {
         return match ($this->colorToken()) {
-            'ok' => 'bg-ok',
-            'upcoming' => 'bg-upcoming',
-            'urgent' => 'bg-urgent',
-            'critical' => 'bg-critical',
-            default => 'bg-muted',
+            'ok' => 'status-dot status-online',
+            'upcoming' => 'status-dot status-upcoming',
+            'urgent' => 'status-dot status-away',
+            'critical' => 'status-dot status-busy',
+            default => 'status-dot status-offline',
+        };
+    }
+
+    public function badgeClass(): string
+    {
+        return match ($this->colorToken()) {
+            'ok' => 'badge badge-soft-success',
+            'upcoming' => 'badge badge-soft-info',
+            'urgent' => 'badge badge-soft-warning',
+            'critical' => 'badge badge-soft-danger',
+            default => 'badge badge-soft-secondary',
+        };
+    }
+
+    public function rank(): int
+    {
+        return match ($this) {
+            self::Expired, self::Critical => 4,
+            self::Urgent => 3,
+            self::Upcoming => 2,
+            self::Ok => 1,
+            self::Unknown => 0,
         };
     }
 

@@ -36,4 +36,18 @@ final class Edition
 
         return true;
     }
+
+    public static function allowsSandboxBilling(): bool
+    {
+        return self::enabled('billing')
+            && ! filled(config('paddle.api_key'))
+            && app()->environment('local', 'testing');
+    }
+
+    public static function cloudUrl(): ?string
+    {
+        $url = config('edition.cloud_url');
+
+        return is_string($url) && $url !== '' ? $url : null;
+    }
 }

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
 #[Fillable([
@@ -28,6 +29,8 @@ use Illuminate\Support\Collection;
     'notes',
     'ssl_check_enabled',
     'last_checked_at',
+    'renewal_cost',
+    'currency',
 ])]
 class Asset extends Model
 {
@@ -42,6 +45,7 @@ class Asset extends Model
             'payer' => AssetPayer::class,
             'ssl_check_enabled' => 'boolean',
             'last_checked_at' => 'datetime',
+            'renewal_cost' => 'decimal:2',
         ];
     }
 
@@ -58,6 +62,11 @@ class Asset extends Model
     public function reminderRules(): HasMany
     {
         return $this->hasMany(ReminderRule::class);
+    }
+
+    public function activityLogs(): MorphMany
+    {
+        return $this->morphMany(ActivityLog::class, 'subject');
     }
 
     public function hostname(): ?string

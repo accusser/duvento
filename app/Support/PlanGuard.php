@@ -25,7 +25,7 @@ final class PlanGuard
 
         if ($workspace->trialExpired()) {
             throw ValidationException::withMessages([
-                'name' => 'Триал закончился. Оформите подписку, чтобы добавлять записи.',
+                'name' => __('app.errors.trial_ended'),
             ]);
         }
 
@@ -33,7 +33,10 @@ final class PlanGuard
 
         if ($limit !== null && $current >= (int) $limit) {
             throw ValidationException::withMessages([
-                'name' => "Лимит тарифа: {$limit} {$key}. Смените план, чтобы добавить ещё.",
+                'name' => __('app.errors.plan_limit', [
+                    'limit' => $limit,
+                    'resource' => __('app.nav.'.$key),
+                ]),
             ]);
         }
     }

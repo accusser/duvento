@@ -1,24 +1,17 @@
+@php
+    $bsTheme = request()->cookie('nyvora-theme') === 'dark' ? 'dark' : 'light';
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="{{ $bsTheme }}" data-ny-scope="app">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? config('app.name') }}</title>
-    <script>
-        (() => {
-            const stored = localStorage.getItem('theme');
-            const theme = stored ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.dataset.theme = theme;
-        })();
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
+    <x-layouts.theme-head :title="$title ?? config('app.name')" />
 </head>
-<body class="min-h-screen bg-surface text-ink antialiased">
+<body>
+    <button class="icon-btn auth-theme-toggle" type="button" data-toggle="theme" data-tip aria-label="{{ __('app.header.theme') }}">
+        <i class="mdi mdi-weather-night"></i>
+        <span class="ny-tip">{{ __('app.header.theme') }}</span>
+    </button>
     {{ $slot }}
-    @livewireScripts
+    <x-layouts.theme-foot />
 </body>
 </html>

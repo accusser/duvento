@@ -1,38 +1,39 @@
-<div class="max-w-xl">
-    <h1 class="font-display text-2xl font-semibold tracking-tight">Тариф</h1>
-    <p class="mt-1 mb-6 text-sm text-muted">Cloud: триал 14 дней, затем Starter или Agency. Без ключа Paddle работает sandbox.</p>
+<div>
+    <x-page-head :title="__('app.billing.title')" :sub="__('app.billing.sub')" />
 
-    <x-ui.card class="space-y-3 p-4">
-        <p>План: <span class="font-mono">{{ $plan }}</span></p>
-        <p>Клиенты: {{ $workspace->clients()->count() }} / {{ $limits['clients'] ?? '∞' }}</p>
-        <p>Активы: {{ $workspace->assets()->count() }} / {{ $limits['assets'] ?? '∞' }}</p>
-        @if ($subscription)
-            <p>Статус: <span class="font-mono">{{ $subscription->status->value }}</span></p>
-            @if ($subscription->trial_ends_at)
-                <p>Триал до: <span class="font-mono">{{ $subscription->trial_ends_at->toDateString() }}</span></p>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p class="mb-2">{{ __('app.billing.plan') }} <code>{{ $plan }}</code></p>
+            <p class="mb-2">{{ __('app.billing.clients') }} {{ $workspace->clients()->count() }} / {{ $limits['clients'] ?? '∞' }}</p>
+            <p class="mb-2">{{ __('app.billing.assets') }} {{ $workspace->assets()->count() }} / {{ $limits['assets'] ?? '∞' }}</p>
+            @if ($subscription)
+                <p class="mb-2">{{ __('app.billing.status') }} <code>{{ $subscription->status->value }}</code></p>
+                @if ($subscription->trial_ends_at)
+                    <p class="mb-2">{{ __('app.billing.trial_until') }} <code>{{ $subscription->trial_ends_at->toDateString() }}</code></p>
+                @endif
             @endif
-        @endif
-        <p class="text-sm text-muted">
-            White-label отчёты — на тарифе Agency.
-        </p>
-        <div class="flex flex-wrap gap-2 pt-2">
-            <x-ui.button variant="accent" wire:click="checkout('starter')">Starter ${{ config('billing.plans.starter.price') }}</x-ui.button>
-            <x-ui.button variant="accent" wire:click="checkout('agency')">Agency ${{ config('billing.plans.agency.price') }}</x-ui.button>
-            <form method="POST" action="{{ route('billing.cancel') }}">
-                @csrf
-                <x-ui.button variant="danger" type="submit">Отменить</x-ui.button>
-            </form>
+            <p class="small text-muted mb-3">{{ __('app.billing.white_label') }}</p>
+            <div class="d-flex flex-wrap gap-2">
+                <x-ui.button variant="accent" wire:click="checkout('starter')">Starter ${{ config('billing.plans.starter.price') }}</x-ui.button>
+                <x-ui.button variant="accent" wire:click="checkout('agency')">Agency ${{ config('billing.plans.agency.price') }}</x-ui.button>
+                <form method="POST" action="{{ route('billing.cancel') }}">
+                    @csrf
+                    <x-ui.button variant="danger" type="submit">{{ __('app.billing.cancel') }}</x-ui.button>
+                </form>
+            </div>
         </div>
-    </x-ui.card>
+    </div>
 
-    <h2 class="mt-8 mb-3 text-sm text-muted">История платежей</h2>
-    <x-ui.card class="divide-y divide-border overflow-hidden">
-        @forelse ($events as $event)
-            <p class="px-4 py-3 font-mono text-sm">
-                {{ $event->created_at->toDateTimeString() }} · {{ $event->type }} · {{ $event->plan?->value }} · {{ $event->amount }}
-            </p>
-        @empty
-            <p class="px-4 py-6 text-sm text-muted">Пока нет платежей.</p>
-        @endforelse
-    </x-ui.card>
+    <h6 class="text-muted mb-2">{{ __('app.billing.payments') }}</h6>
+    <div class="card">
+        <div class="list-group list-group-flush">
+            @forelse ($events as $event)
+                <div class="list-group-item">
+                    <code class="small">{{ $event->created_at->toDateTimeString() }} · {{ $event->type }} · {{ $event->plan?->value }} · {{ $event->amount }}</code>
+                </div>
+            @empty
+                <div class="ny-list-empty">{{ __('app.billing.empty_payments') }}</div>
+            @endforelse
+        </div>
+    </div>
 </div>

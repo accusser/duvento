@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Asset;
 use App\Support\ActivityLogger;
+use App\Support\ScheduleHeartbeat;
 use App\Support\SslCertificateInspector;
 use Illuminate\Console\Command;
 
@@ -33,6 +34,7 @@ class CheckSslCertificates extends Command
 
             if ($expiry === null) {
                 ActivityLogger::log($asset->workspace, 'ssl.check_failed', $asset, ['host' => $host], null);
+
                 continue;
             }
 
@@ -49,6 +51,7 @@ class CheckSslCertificates extends Command
             }
         }
 
+        ScheduleHeartbeat::touch('ssl');
         $this->info('SSL check finished: '.$assets->count().' assets');
 
         return self::SUCCESS;

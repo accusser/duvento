@@ -21,6 +21,7 @@ final class WorkspaceProvisioner
         $workspace = Workspace::query()->create([
             'name' => $name,
             'plan' => $plan,
+            'currency' => 'USD',
         ]);
 
         $workspace->attachOwner($owner);

@@ -1,22 +1,33 @@
-<div class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
-    <a href="/" class="font-display text-2xl font-semibold tracking-tight text-brand">Duvento</a>
-    <h1 class="mt-8 font-display text-2xl font-semibold">Регистрация</h1>
-    @if (\App\Support\Edition::isCloud())
-        <p class="mt-2 text-sm text-muted">14 дней триала, карта не нужна. Потом Starter $19 или Agency $49.</p>
-    @endif
-    <form wire:submit="register" class="mt-6 space-y-4">
-        <x-ui.input label="Имя" wire:model="name" />
-        @error('name') <p class="text-sm text-critical">{{ $message }}</p> @enderror
-        <x-ui.input label="Email" type="email" wire:model="email" autocomplete="username" />
-        @error('email') <p class="text-sm text-critical">{{ $message }}</p> @enderror
-        <x-ui.input label="Агентство / воркспейс" wire:model="workspace" />
-        @error('workspace') <p class="text-sm text-critical">{{ $message }}</p> @enderror
-        <x-ui.input label="Пароль" type="password" wire:model="password" autocomplete="new-password" />
-        @error('password') <p class="text-sm text-critical">{{ $message }}</p> @enderror
-        <x-ui.input label="Пароль ещё раз" type="password" wire:model="password_confirmation" autocomplete="new-password" />
-        <x-ui.button variant="accent" type="submit" class="w-full">Создать аккаунт</x-ui.button>
-    </form>
-    <p class="mt-6 text-sm text-muted">
-        Уже есть аккаунт? <a href="{{ route('login') }}" class="text-brand" wire:navigate>Вход</a>
-    </p>
+<div class="auth-page">
+    <div class="auth-card">
+        <a href="{{ url('/') }}" class="auth-brand" wire:navigate>
+            <span class="brand-mark">D</span>
+            <span class="ny-display-h">{{ __('app.brand') }}</span>
+        </a>
+        <h4 class="text-center mb-1 fw-bold">{{ __('app.auth.create_account') }}</h4>
+        @if (\App\Support\Edition::isCloud())
+            <p class="text-muted text-center mb-4">{{ __('app.auth.register_cloud') }}</p>
+        @else
+            <p class="text-muted text-center mb-4">{{ __('app.auth.register_selfhost') }}</p>
+        @endif
+        <form wire:submit="register">
+            <x-ui.input :label="__('app.fields.name')" wire:model="name" placeholder="{{ __('app.fields.name') }}" />
+            @error('name') <div class="invalid-feedback d-block mt-n3 mb-3">{{ $message }}</div> @enderror
+            <x-ui.input :label="__('app.fields.email')" type="email" wire:model="email" autocomplete="username" placeholder="you@company.com" :disabled="(bool) $inviteToken" />
+            @error('email') <div class="invalid-feedback d-block mt-n3 mb-3">{{ $message }}</div> @enderror
+            @if ($inviteToken)
+                <p class="small text-muted">{{ __('app.auth.register_invite') }}</p>
+            @else
+                <x-ui.input :label="__('app.fields.workspace')" wire:model="workspace" placeholder="{{ __('app.auth.workspace_placeholder') }}" />
+                @error('workspace') <div class="invalid-feedback d-block mt-n3 mb-3">{{ $message }}</div> @enderror
+            @endif
+            <x-ui.input :label="__('app.fields.password')" type="password" wire:model="password" autocomplete="new-password" placeholder="{{ __('app.auth.password_hint') }}" />
+            @error('password') <div class="invalid-feedback d-block mt-n3 mb-3">{{ $message }}</div> @enderror
+            <x-ui.input :label="__('app.fields.password_confirmation')" type="password" wire:model="password_confirmation" autocomplete="new-password" />
+            <button type="submit" class="btn btn-primary w-100 mb-3">{{ __('app.auth.submit_register') }}</button>
+            <p class="text-center small mb-0 text-muted">
+                {{ __('app.auth.has_account') }} <a href="{{ route('login') }}" class="text-primary fw-semibold" wire:navigate>{{ __('app.auth.login') }}</a>
+            </p>
+        </form>
+    </div>
 </div>

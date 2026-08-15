@@ -3,6 +3,8 @@
 return [
     'edition' => env('APP_EDITION', 'self-host'),
 
+    'cloud_url' => env('CLOUD_URL'),
+
     'cloud_features' => [
         'white_label' => true,
         'public_api' => true,

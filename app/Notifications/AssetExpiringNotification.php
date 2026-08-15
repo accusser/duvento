@@ -27,10 +27,14 @@ class AssetExpiringNotification extends Notification implements ShouldQueue
         $days = $this->asset->days_left;
 
         return (new MailMessage)
-            ->subject("Duvento: {$this->asset->name} истекает через {$days} дн.")
-            ->line("Актив «{$this->asset->name}» ({$this->asset->assetType?->label}) истекает {$this->asset->expires_at?->toDateString()}.")
-            ->line('Клиент: '.($this->asset->client?->name ?? '—'))
-            ->line('Осталось дней: '.$days)
-            ->line('Это напоминание за '.$this->daysBefore.' дн. до дедлайна.');
+            ->subject(__('app.mail.expiring_subject', ['name' => $this->asset->name, 'days' => $days]))
+            ->line(__('app.mail.expiring_line', [
+                'name' => $this->asset->name,
+                'type' => $this->asset->assetType?->displayLabel(),
+                'date' => $this->asset->expires_at?->toDateString(),
+            ]))
+            ->line(__('app.mail.expiring_client', ['client' => $this->asset->client?->name ?? __('app.common.empty')]))
+            ->line(__('app.mail.expiring_days', ['days' => $days]))
+            ->line(__('app.mail.expiring_before', ['days' => $this->daysBefore]));
     }
 }

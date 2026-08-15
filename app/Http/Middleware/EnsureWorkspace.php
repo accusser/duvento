@@ -17,8 +17,12 @@ class EnsureWorkspace
             auth()->logout();
 
             return redirect()->route('login')->withErrors([
-                'email' => 'Рабочее пространство не найдено.',
+                'email' => __('app.auth.workspace_missing'),
             ]);
+        }
+
+        if (! $user->workspaces()->whereKey($workspace->id)->exists()) {
+            abort(403);
         }
 
         if ($workspace->blocked_at !== null) {
@@ -27,7 +31,7 @@ class EnsureWorkspace
             $request->session()->regenerateToken();
 
             return redirect()->route('login')->withErrors([
-                'email' => 'Рабочее пространство заблокировано.',
+                'email' => __('app.auth.workspace_blocked'),
             ]);
         }
 

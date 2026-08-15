@@ -18,7 +18,7 @@ class ExampleTest extends TestCase
         $response->assertOk();
         $response->assertSee('Duvento');
         $response->assertSee('nordic-atelier.ru');
-        $response->assertSee('Starter');
-        $response->assertSee('$19');
+        $response->assertSee('Self-host');
+        $response->assertDontSee('$19');
     }
 }

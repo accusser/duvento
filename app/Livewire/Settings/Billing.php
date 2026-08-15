@@ -3,14 +3,13 @@
 namespace App\Livewire\Settings;
 
 use App\Contracts\BillingGateway;
+use App\Enums\WorkspacePlan;
 use App\Livewire\Concerns\InteractsWithWorkspace;
 use App\Support\Edition;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
-#[Title('Тариф — Duvento')]
 class Billing extends Component
 {
     use InteractsWithWorkspace;
@@ -18,15 +17,17 @@ class Billing extends Component
     public function checkout(string $plan, BillingGateway $gateway)
     {
         abort_unless(Edition::enabled('billing'), 404);
+        $this->assertOwner();
 
         return redirect()->away(
-            $gateway->checkoutUrl($this->workspace(), \App\Enums\WorkspacePlan::from($plan)),
+            $gateway->checkoutUrl($this->workspace(), WorkspacePlan::from($plan)),
         );
     }
 
     public function render()
     {
         abort_unless(Edition::enabled('billing'), 404);
+        $this->assertOwner();
 
         $workspace = $this->workspace();
         $plan = $workspace->plan->value;
@@ -34,6 +35,7 @@ class Billing extends Component
         $subscription = $workspace->subscriptions()->latest()->first();
         $events = $workspace->paymentEvents()->latest()->limit(20)->get();
 
-        return view('livewire.settings.billing', compact('workspace', 'plan', 'limits', 'subscription', 'events'));
+        return view('livewire.settings.billing', compact('workspace', 'plan', 'limits', 'subscription', 'events'))
+            ->title(__('app.titles.billing'));
     }
 }

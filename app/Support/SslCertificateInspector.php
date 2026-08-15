@@ -8,6 +8,9 @@ class SslCertificateInspector
 {
     public function expiryFor(string $host, int $timeout = 10): ?Carbon
     {
+        if (! PublicHttpUrl::hostIsPublic($host)) {
+            return null;
+        }
         $context = stream_context_create([
             'ssl' => [
                 'capture_peer_cert' => true,

@@ -1,3 +1,3 @@
-<div {{ $attributes->class('rounded-[10px] border border-border bg-card') }}>
+<div {{ $attributes->class('card') }}>
     {{ $slot }}
 </div>

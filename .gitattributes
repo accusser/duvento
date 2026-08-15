@@ -6,8 +6,9 @@
 *.md diff=markdown
 *.php diff=php
 
-/.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
 /packages/duvento-cloud export-ignore
 /тз export-ignore
+/1fila export-ignore
+/1Nyvora export-ignore

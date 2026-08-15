@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AssetTypes;
 
+use App\Filament\Concerns\HasAdminLexicon;
 use App\Filament\Resources\AssetTypes\Pages\CreateAssetType;
 use App\Filament\Resources\AssetTypes\Pages\EditAssetType;
 use App\Filament\Resources\AssetTypes\Pages\ListAssetTypes;
@@ -17,11 +18,18 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AssetTypeResource extends Resource
 {
+    use HasAdminLexicon;
+
     protected static ?string $model = AssetType::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
-    protected static ?string $navigationLabel = 'Типы активов';
+    protected static ?int $navigationSort = 5;
+
+    public static function adminLexicon(): string
+    {
+        return 'admin.resources.asset_types';
+    }
 
     public static function getEloquentQuery(): Builder
     {

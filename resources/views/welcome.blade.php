@@ -1,83 +1,168 @@
-<x-layouts.guest>
-    <div class="mx-auto flex min-h-screen max-w-5xl flex-col px-6 py-8">
-        <header class="flex items-center justify-between">
-            <p class="font-display text-xl font-semibold tracking-tight text-brand">Duvento</p>
-            <div class="flex items-center gap-3">
-                <span class="rounded-[10px] border border-border px-2.5 py-1 text-xs text-muted">{{ $edition }}</span>
-                <x-theme-toggle />
-            </div>
-        </header>
+<x-layouts.guest title="Duvento — Deadline tracking for agencies">
+    <main class="landing-page">
+        <div class="container">
+            <header class="landing-top">
+                <a href="{{ url('/') }}" class="brand" aria-label="Duvento home">
+                    <span class="brand-mark">D</span>
+                    <span class="brand-text">Duvento</span>
+                </a>
 
-        <main class="grid flex-1 items-center gap-12 py-16 lg:grid-cols-2">
-            <div>
-                <h1 class="font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-                    Ничего не сгорит незаметно
-                </h1>
-                <p class="mt-4 max-w-md text-muted">
-                    Домены, SSL, хостинг и лицензии клиентов — в одном месте, с напоминаниями до дедлайна.
-                </p>
-                <div class="mt-8 flex gap-3">
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="inline-flex rounded-[10px] bg-accent px-4 py-2 text-sm font-medium text-white">В панель</a>
-                    @else
-                        <a href="{{ route('login') }}" class="inline-flex rounded-[10px] border border-border px-4 py-2 text-sm">Вход</a>
-                        <a href="{{ route('register') }}" class="inline-flex rounded-[10px] bg-accent px-4 py-2 text-sm font-medium text-white">Регистрация</a>
-                    @endauth
+                <nav class="landing-nav" aria-label="Portal navigation">
+                    <span class="badge badge-soft-primary text-uppercase">{{ $edition }}</span>
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="mdi mdi-account-outline me-1"></i>Client portal
+                    </a>
+                    <a href="{{ url('/admin') }}" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-shield-account-outline me-1"></i>Admin portal
+                    </a>
+                </nav>
+            </header>
+
+            <section class="landing-hero">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6">
+                        <span class="landing-eyebrow"><i class="mdi mdi-radar"></i> Deadline control center</span>
+                        <h1>Nothing expires unnoticed.</h1>
+                        <p class="landing-lead">
+                            Keep client domains, SSL certificates, hosting plans, and software licenses in one calm, reliable workspace.
+                        </p>
+
+                        <div class="landing-actions">
+                            <a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg">
+                                Open client portal <i class="mdi mdi-arrow-right ms-1"></i>
+                            </a>
+                            <a href="{{ url('/admin') }}" class="btn btn-outline-secondary btn-lg">
+                                Open admin portal
+                            </a>
+                        </div>
+
+                        <div class="landing-proof">
+                            <span><i class="mdi mdi-check-circle"></i>Email reminders</span>
+                            <span><i class="mdi mdi-check-circle"></i>SSL monitoring</span>
+                            <span><i class="mdi mdi-check-circle"></i>CSV export</span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="landing-preview card">
+                            <div class="card-header">
+                                <div>
+                                    <span class="landing-preview-label">Live overview</span>
+                                    <h5>Upcoming deadlines</h5>
+                                </div>
+                                <span class="badge badge-soft-primary">Demo</span>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                @foreach ($assets as $asset)
+                                    <x-asset-countdown :asset="$asset" />
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="overflow-hidden rounded-[10px] border border-border bg-card">
-                <div class="border-b border-border px-4 py-3 text-sm text-muted">Ближайшие дедлайны</div>
-                <div class="divide-y divide-border">
-                    @forelse ($assets as $asset)
-                        <x-asset-countdown :asset="$asset" />
-                    @empty
-                        <p class="px-4 py-8 text-sm text-muted">Пока нет активов. Запустите <code class="font-mono">php artisan migrate --seed</code>.</p>
-                    @endforelse
+            <section class="portal-section" aria-labelledby="portal-heading">
+                <div class="section-heading">
+                    <span class="landing-eyebrow">Choose your workspace</span>
+                    <h2 id="portal-heading">Two portals, one clear system</h2>
+                    <p>Use the client workspace for daily deadline management or the admin area for system-wide control.</p>
                 </div>
-            </div>
-        </main>
 
-        <section class="grid gap-6 border-t border-border py-12 md:grid-cols-3">
-            <div class="rounded-[10px] border border-border bg-card p-5">
-                <h2 class="font-display text-lg font-semibold">Self-host</h2>
-                <p class="mt-2 font-mono text-2xl">$0</p>
-                <p class="mt-2 text-sm text-muted">AGPLv3. Composer + MySQL + cron, без Docker.</p>
-            </div>
-            <div class="rounded-[10px] border border-border bg-card p-5">
-                <h2 class="font-display text-lg font-semibold">Starter</h2>
-                <p class="mt-2 font-mono text-2xl">$19<span class="text-sm text-muted">/мес</span></p>
-                <p class="mt-2 text-sm text-muted">До 25 клиентов. Триал 14 дней, карта не нужна.</p>
-            </div>
-            <div class="rounded-[10px] border border-border bg-card p-5">
-                <h2 class="font-display text-lg font-semibold">Agency</h2>
-                <p class="mt-2 font-mono text-2xl">$49<span class="text-sm text-muted">/мес</span></p>
-                <p class="mt-2 text-sm text-muted">До 100 клиентов и white-label отчёт клиенту.</p>
-            </div>
-        </section>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <a href="{{ route('dashboard') }}" class="portal-card">
+                            <span class="portal-icon"><i class="mdi mdi-view-dashboard-outline"></i></span>
+                            <span class="portal-copy">
+                                <small>FOR TEAMS AND CLIENTS</small>
+                                <strong>Client portal</strong>
+                                <span>Manage clients, assets, reminders, reports, and account settings.</span>
+                            </span>
+                            <i class="mdi mdi-arrow-right portal-arrow"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url('/admin') }}" class="portal-card portal-card-admin">
+                            <span class="portal-icon"><i class="mdi mdi-shield-crown-outline"></i></span>
+                            <span class="portal-copy">
+                                <small>FOR ADMINISTRATORS</small>
+                                <strong>Admin portal</strong>
+                                <span>Control users, workspaces, system health, and operational data.</span>
+                            </span>
+                            <i class="mdi mdi-arrow-right portal-arrow"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
 
-        <section class="grid gap-6 border-t border-border py-12 md:grid-cols-2">
-            <div class="rounded-[10px] border border-border bg-card p-5">
-                <h2 class="font-display text-lg font-semibold">Self-host</h2>
-                <p class="mt-2 text-sm text-muted">AGPLv3, бесплатно. Composer + MySQL + cron, без Docker. Для r/selfhosted и тех, кто держит сервер сам.</p>
-            </div>
-            <div class="rounded-[10px] border border-border bg-card p-5">
-                <h2 class="font-display text-lg font-semibold">Cloud</h2>
-                <p class="mt-2 text-sm text-muted">Триал 14 дней, затем Starter $19 или Agency $49. Без возни с сервером — Indie Hackers / Product Hunt.</p>
-                <form method="POST" action="{{ route('waitlist.store') }}" class="mt-4 space-y-3">
-                    @csrf
-                    <x-ui.input name="name" placeholder="Имя" />
-                    <x-ui.input name="email" type="email" placeholder="Email" required />
-                    <x-ui.button variant="accent" type="submit">В вейтлист</x-ui.button>
-                    @if (session('status'))
-                        <p class="text-sm text-ok">{{ session('status') }}</p>
-                    @endif
-                </form>
-            </div>
-        </section>
+            @if (\App\Support\Edition::isCloud())
+                <section class="cloud-plans" aria-labelledby="plans-heading">
+                    <div class="section-heading">
+                        <span class="landing-eyebrow">Managed cloud</span>
+                        <h2 id="plans-heading">Start with a 14-day trial</h2>
+                        <p>No card required. Choose Starter for a small team or Agency for a growing client portfolio.</p>
+                    </div>
+                    <div class="row g-4 align-items-stretch">
+                        <div class="col-md-4">
+                            <div class="card pricing-card h-100">
+                                <span class="badge badge-soft-secondary mb-2">OPEN SOURCE</span>
+                                <h4>Self-host</h4>
+                                <p class="text-muted">Install and maintain Duvento on your own server.</p>
+                                <div class="pricing-price">$0<small>/forever</small></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card pricing-card featured h-100">
+                                <span class="badge bg-white text-primary mb-2">MOST POPULAR</span>
+                                <h4>Starter</h4>
+                                <p class="ny-op-9">Deadline tracking for up to 25 clients.</p>
+                                <div class="pricing-price">$19<small>/month</small></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card pricing-card h-100">
+                                <span class="badge badge-soft-warning mb-2">FOR AGENCIES</span>
+                                <h4>Agency</h4>
+                                <p class="text-muted">Up to 100 clients with white-label reports.</p>
+                                <div class="pricing-price">$49<small>/month</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="cloud-waitlist card" method="POST" action="{{ route('waitlist.store') }}">
+                        @csrf
+                        <div>
+                            <strong>Want early access?</strong>
+                            <span>Leave your details and we will keep you posted.</span>
+                        </div>
+                        <x-ui.input name="name" placeholder="Name" />
+                        <x-ui.input name="email" type="email" placeholder="Email address" required />
+                        <x-ui.button variant="accent" type="submit">Join waitlist</x-ui.button>
+                        @if (session('status'))
+                            <p class="text-success small mb-0">{{ session('status') }}</p>
+                        @endif
+                    </form>
+                </section>
+            @endif
 
-        <footer class="border-t border-border py-6 text-sm text-muted">
-            Self-host под AGPLv3. Cloud — тот же продукт без установки.
-        </footer>
-    </div>
+            <section class="landing-info">
+                <div>
+                    <i class="mdi mdi-server-outline"></i>
+                    <span>
+                        <strong>{{ \App\Support\Edition::isCloud() ? 'Managed cloud edition' : 'Self-hosted edition' }}</strong>
+                        {{ \App\Support\Edition::isCloud()
+                            ? 'A hosted workspace with no server maintenance required.'
+                            : 'Free AGPLv3 software powered by PHP, MySQL or SQLite, and cron.' }}
+                    </span>
+                </div>
+                <a href="https://duvento.com" target="_blank" rel="noopener noreferrer">
+                    Duvento.com <i class="mdi mdi-open-in-new"></i>
+                </a>
+            </section>
+
+            <footer class="app-footer">
+                <span>© {{ now()->year }} <a href="https://duvento.com" target="_blank" rel="noopener noreferrer">Duvento</a></span>
+                <span>Deadline tracking without the noise.</span>
+            </footer>
+        </div>
+    </main>
 </x-layouts.guest>
