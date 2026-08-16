@@ -19,6 +19,7 @@ rsync -a \
   --exclude '/releases/' \
   --exclude '/.env' \
   --exclude '/.cursor/' \
+  --exclude '/.cursorignore' \
   --exclude '/database/database.sqlite' \
   --exclude '/storage/logs/*.log' \
   --exclude '/storage/framework/cache/data/' \
@@ -28,6 +29,16 @@ rsync -a \
   --exclude '/storage/app/private/' \
   --exclude '/storage/app/installed' \
   --exclude '/storage/app/*.backup' \
+  --exclude '/public/theme/images/avatars/' \
+  --exclude '/public/theme/images/covers/' \
+  --exclude '/public/theme/images/gallery/' \
+  --exclude '/public/theme/images/users/' \
+  --exclude '/public/theme/vendor/remixicon/remixicon.glyph.json' \
+  --exclude '/public/theme/vendor/remixicon/remixicon.symbol.svg' \
+  --exclude '/public/theme/vendor/remixicon/remixicon.less' \
+  --exclude '/public/theme/vendor/mdi/css/materialdesignicons.css' \
+  --exclude '/public/theme/vendor/mdi/css/materialdesignicons.css.map' \
+  --exclude '/public/theme/vendor/mdi/css/materialdesignicons.min.css.map' \
   "$root/" "$dest/"
 
 mkdir -p "$dest/storage/app/private" \
@@ -58,7 +69,7 @@ if command -v composer >/dev/null; then
   (cd "$dest" && composer update --no-install --no-scripts --no-interaction)
 fi
 
-leaks=(packages/duvento-cloud тз 1fila 1Nyvora)
+leaks=(packages/duvento-cloud тз 1fila 1Nyvora .cursorignore)
 for leak in "${leaks[@]}"; do
   if [ -e "$dest/$leak" ]; then
     echo "OSS leak: $leak" >&2
@@ -68,6 +79,11 @@ done
 
 if grep -q 'duvento/cloud' "$dest/composer.json"; then
   echo "OSS leak: duvento/cloud in composer.json" >&2
+  exit 1
+fi
+
+if [ -e "$dest/public/theme/images/covers" ] || [ -e "$dest/public/theme/vendor/remixicon/remixicon.glyph.json" ]; then
+  echo "OSS leak: unused theme vendor/demo assets" >&2
   exit 1
 fi
 
